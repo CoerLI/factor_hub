@@ -1,0 +1,481 @@
+# 时间序列分析模型配置文件
+# 创建时间: 2023-01-01
+# 版本: 1.0.0
+
+# 全局设置
+version: 1.0.0
+created_at: "2023-01-01T00:00:00Z"
+
+# 数据配置
+data:
+  # 数据目录
+  data_dir: "./data"
+  # 缓存目录
+  cache_dir: "./cache"
+  # 文件扩展名
+  file_extension: "csv"
+  # 日期列名
+  date_column: "date"
+  # 时区设置
+  timezone: "UTC"
+  # 默认数据字段
+  default_fields: ["open", "high", "low", "close", "volume"]
+  # 数据加载设置
+  loading:
+    # 批量加载大小
+    batch_size: 10000
+    # 是否并行加载
+    parallel: true
+    # 最大工作线程
+    max_workers: 4
+
+# 模型配置
+models:
+  # 模型目录
+  models_dir: "./models"
+  # 部署目录
+  deploy_dir: "./deployments"
+  # 最大保留模型数量
+  max_models: 10
+  # 模型保留天数
+  model_retention_days: 30
+  # 默认模型类型
+  default_model_type: "xgboost"
+  # XGBoost配置
+  xgboost:
+    # 树的数量
+    n_estimators: 100
+    # 树的最大深度
+    max_depth: 6
+    # 学习率
+    learning_rate: 0.1
+    # 样本采样比例
+    subsample: 0.8
+    # 特征采样比例
+    colsample_bytree: 0.8
+    # 正则化参数
+    reg_alpha: 0.1
+    reg_lambda: 1.0
+  # LightGBM配置
+  lightgbm:
+    n_estimators: 100
+    max_depth: 6
+    learning_rate: 0.1
+    subsample: 0.8
+    colsample_bytree: 0.8
+    # LightGBM特有参数
+    boosting_type: "gbdt"
+    num_leaves: 31
+  # 随机森林配置
+  random_forest:
+    n_estimators: 100
+    max_depth: null
+    min_samples_split: 2
+    min_samples_leaf: 1
+    random_state: 42
+  # 深度学习配置
+  deep_learning:
+    # 输入大小（会根据实际特征数量自动设置）
+    input_size: null
+    # 隐藏层大小
+    hidden_sizes: [64, 32]
+    # Dropout率
+    dropout_rates: [0.2, 0.2]
+    # 批量大小
+    batch_size: 32
+    # 训练轮数
+    epochs: 100
+    # 学习率
+    learning_rate: 0.001
+    # 优化器类型
+    optimizer: "adam"
+    # 损失函数
+    loss_function: "mse"
+
+# 特征工程配置
+features:
+  # 是否使用技术指标
+  use_technical_indicators: true
+  # 是否使用基本面数据
+  use_fundamental_data: false
+  # 是否使用情绪数据
+  use_sentiment_data: false
+  # 时间窗口大小列表
+  window_sizes: [5, 10, 20, 50]
+  # 技术指标配置
+  technical_indicators:
+    moving_averages: true
+    rsi: true
+    macd: true
+    bollinger_bands: true
+    volume_indicators: true
+    momentum: true
+    volatility: true
+  # 特征选择配置
+  feature_selection:
+    enabled: true
+    # 选择方法: importance, pearson, lasso
+    method: "importance"
+    # 选择前N个特征
+    top_n: 20
+  # 时间特征配置
+  time_features:
+    day_of_week: true
+    month: true
+    quarter: true
+    year: false
+    hour_of_day: false
+  # 滞后特征配置
+  lag_features:
+    enabled: true
+    # 滞后步长
+    lags: [1, 5, 10, 20]
+    # 要创建滞后特征的原始列
+    columns: ["close", "volume"]
+
+# 回测配置
+backtest:
+  # 初始资金
+  initial_capital: 1000000.0
+  # 佣金率
+  commission: 0.001
+  # 滑点
+  slippage: 0.0005
+  # 无风险利率
+  risk_free_rate: 0.02
+  # 基准指数
+  benchmark_symbol: "SPY"
+  # 再平衡频率: daily, weekly, monthly
+  rebalance_frequency: "daily"
+  # 头寸调整方法: equal_weight, risk_parity, market_neutral
+  position_sizing: "equal_weight"
+  # 最大持仓比例
+  max_position_size: 0.1
+  # 最小持仓比例
+  min_position_size: 0.01
+  # 杠杆倍数
+  leverage: 1.0
+  # 交易成本计算方式
+  transaction_cost_model: "fixed_percent"
+
+# 因子配置
+factors:
+  # 因子库路径
+  factor_library_path: "./src/factors"
+  # 最大因子依赖深度
+  max_factor_depth: 5
+  # 缓存过期时间（秒）
+  cache_expiry_seconds: 3600
+  # 是否并行计算
+  parallel_computation: true
+  # 最大工作线程
+  max_workers: 4
+  # 基础因子权重
+  base_factor_weights:
+    momentum: 0.3
+    value: 0.2
+    quality: 0.2
+    volume: 0.2
+    volatility: 0.1
+
+# API服务配置
+api:
+  # 主机地址
+  host: "0.0.0.0"
+  # 端口
+  port: 8000
+  # 调试模式
+  debug: false
+  # 工作进程数
+  workers: 4
+  # CORS配置
+  cors_origins: ["*"]
+  # 请求超时时间（秒）
+  timeout: 300
+  # 最大请求大小（字节）
+  max_request_size: 10485760
+  # API密钥认证
+  api_keys:
+    enabled: false
+    keys: []
+  # API文档
+  documentation:
+    enabled: true
+    path: "/docs"
+
+# 监控配置
+monitoring:
+  # 是否启用监控
+  enabled: true
+  # 监控端口
+  port: 8001
+  # 指标路径
+  metrics_path: "/metrics"
+  # 日志级别
+  log_level: "INFO"
+  # 告警配置
+  alerting:
+    # 是否启用告警
+    enabled: false
+    # 告警邮箱
+    email: ""
+    # Slack Webhook
+    slack_webhook: ""
+    # 告警阈值
+    thresholds:
+      error_rate: 0.01
+      latency_ms: 1000
+  # 健康检查
+  health_check:
+    enabled: true
+    path: "/health"
+    timeout: 10
+
+# 日志配置
+logging:
+  # 日志级别
+  level: "INFO"
+  # 日志目录
+  log_dir: "./logs"
+  # 日志轮转策略: daily, size
+  rotation: "daily"
+  # 单文件最大大小（字节）
+  max_bytes: 10485760
+  # 保留文件数
+  backup_count: 7
+  # 日志格式
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  # 文件日志
+  file_logging:
+    enabled: true
+  # 控制台日志
+  console_logging:
+    enabled: true
+  # JSON格式日志
+  json_format: false
+
+# 部署配置
+deployment:
+  # Docker配置
+  docker:
+    # 是否启用Docker
+    enabled: true
+    # 镜像名称
+    image_name: "timeseries-model-service"
+    # 镜像标签
+    tag: "latest"
+    # Dockerfile路径
+    dockerfile_path: "./Dockerfile"
+    # 构建参数
+    build_args:
+      VERSION: "1.0.0"
+  # Kubernetes配置
+  kubernetes:
+    # 是否启用Kubernetes
+    enabled: false
+    # 命名空间
+    namespace: "timeseries"
+    # 副本数
+    replicas: 2
+    # 资源限制
+    resources:
+      cpu: "1"
+      memory: "1Gi"
+    # 自动扩缩容
+    autoscaling:
+      enabled: false
+      min_replicas: 2
+      max_replicas: 10
+      cpu_percent: 80
+    # 服务暴露
+    service:
+      type: "LoadBalancer"
+      port: 80
+      target_port: 8000
+
+# 性能优化配置
+performance:
+  # 缓存配置
+  cache:
+    enabled: true
+    # 缓存类型: memory, disk, hybrid
+    type: "hybrid"
+    # 内存缓存大小限制（MB）
+    memory_limit_mb: 512
+    # 磁盘缓存目录
+    disk_dir: "./cache/disk"
+  # 并行计算
+  parallelism:
+    enabled: true
+    # 默认工作线程数
+    default_workers: 4
+    # 最大工作线程数
+    max_workers: 8
+  # 批处理配置
+  batching:
+    enabled: true
+    # 默认批处理大小
+    default_batch_size: 1000
+    # 最大批处理大小
+    max_batch_size: 10000
+
+# 数据预处理配置
+preprocessing:
+  # 缺失值处理
+  missing_values:
+    # 处理方法: drop, fill, interpolate
+    method: "interpolate"
+    # 填充值（当method=fill时使用）
+    fill_value: 0.0
+    # 插值方法（当method=interpolate时使用）
+    interpolate_method: "linear"
+  # 异常值处理
+  outliers:
+    # 处理方法: drop, cap, winsorize, ignore
+    method: "winsorize"
+    # 上下限倍数（基于标准差）
+    threshold: 3.0
+  # 数据标准化
+  normalization:
+    # 标准化方法: minmax, zscore, robust, none
+    method: "zscore"
+  # 重采样配置
+  resampling:
+    # 是否启用
+    enabled: false
+    # 目标频率
+    frequency: "D"
+    # 填充方法
+    fill_method: "pad"
+
+# 多资产配置
+multi_asset:
+  # 资产分组
+  groups:
+    # 股票分组
+    stocks:
+      enabled: true
+      symbols: []
+    # 加密货币分组
+    cryptocurrencies:
+      enabled: false
+      symbols: []
+    # 商品分组
+    commodities:
+      enabled: false
+      symbols: []
+  # 资产权重计算方法
+  weighting_method: "equal_weight"
+
+# 集成学习配置
+ensemble:
+  # 是否启用集成
+  enabled: false
+  # 集成方法: weighted_average, stacking, voting
+  method: "weighted_average"
+  # 基础模型
+  base_models:
+    - "xgboost"
+    - "lightgbm"
+    - "random_forest"
+  # 模型权重
+  weights: []
+  # 元模型（stacking方法使用）
+  meta_model: "linear"
+
+# 模型评估配置
+evaluation:
+  # 评估指标
+  metrics:
+    - "rmse"
+    - "mae"
+    - "r2"
+    - "mse"
+  # 交叉验证
+  cross_validation:
+    # 是否启用
+    enabled: true
+    # 折数
+    folds: 5
+    # 随机种子
+    random_state: 42
+  # 时间序列交叉验证
+  time_series_split:
+    # 是否启用
+    enabled: true
+    # 初始训练集大小
+    initial_train_size: 0.6
+    # 测试集大小
+    test_size: 0.2
+    # 滑动步长
+    step_size: 0.1
+
+# 自动化任务配置
+automation:
+  # 定时任务
+  scheduled_jobs:
+    # 模型重新训练
+    retrain_model:
+      enabled: false
+      # cron表达式
+      schedule: "0 0 * * 1"  # 每周一午夜
+      # 是否邮件通知
+      notify: false
+    # 数据更新
+    update_data:
+      enabled: false
+      schedule: "0 * * * *"  # 每小时
+      notify: false
+  # 自动模型优化
+  auto_optimization:
+    enabled: false
+    # 优化频率: daily, weekly, monthly
+    frequency: "weekly"
+    # 是否自动部署最佳模型
+    auto_deploy: false
+
+# 模型监控配置
+model_monitoring:
+  # 性能监控
+  performance:
+    enabled: true
+    # 监控频率（秒）
+    check_interval: 3600
+    # 性能下降阈值
+    degradation_threshold: 0.1
+  # 数据漂移监控
+  data_drift:
+    enabled: true
+    # 监控方法: ks_test, kl_divergence
+    method: "ks_test"
+    # 显著性水平
+    significance_level: 0.05
+  # 预测漂移监控
+  prediction_drift:
+    enabled: true
+    # 基线预测分布
+    baseline_percentile: 0.95
+
+# 安全配置
+security:
+  # 认证
+  authentication:
+    enabled: false
+    # 认证方法: api_key, jwt
+    method: "api_key"
+  # 授权
+  authorization:
+    enabled: false
+    # 角色定义
+    roles:
+      admin: ["read", "write", "admin"]
+      user: ["read", "write"]
+      guest: ["read"]
+  # 敏感数据保护
+  data_protection:
+    enabled: false
+    # 加密算法
+    encryption_algorithm: "AES256"
+
+# 包含其他配置文件
+include_configs: []

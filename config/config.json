@@ -1,0 +1,86 @@
+{
+  "project": {
+    "name": "m_timeseries_model",
+    "version": "1.0.0",
+    "description": "量化因子库与时间序列模型框架"
+  },
+  "data": {
+    "base_path": "d:\\trae_project\\m_timeseries_model\\index_data",
+    "file_format": "csv",
+    "date_column": "kline_time",
+    "date_format": "%Y-%m-%d",
+    "default_frequency": "daily",
+    "cache_enabled": true,
+    "cache_dir": ".cache"
+  },
+  "factors": {
+    "base_path": "src/factors",
+    "cache_enabled": true,
+    "cache_ttl_seconds": 3600,
+    "max_factor_memory_mb": 512,
+    "parallel_computation": true,
+    "max_workers": 4
+  },
+  "models": {
+    "base_path": "src/models",
+    "save_path": "models",
+    "random_state": 42,
+    "cv_folds": 5,
+    "early_stopping": true,
+    "patience": 10
+  },
+  "backtest": {
+    "initial_capital": 1000000.0,
+    "commission_rate": 0.0003,
+    "slippage": 0.0001,
+    "risk_free_rate": 0.025,
+    "portfolio_rebalancing_frequency": "daily",
+    "max_position_percentage": 0.1,
+    "max_leverage": 1.0
+  },
+  "logging": {
+    "level": "INFO",
+    "file_path": "logs/app.log",
+    "console_level": "INFO",
+    "file_level": "INFO",
+    "rotation": {
+      "enabled": true,
+      "when": "D",
+      "interval": 1,
+      "backup_count": 7
+    }
+  },
+  "performance": {
+    "monitoring_enabled": true,
+    "track_memory": true,
+    "track_time": true,
+    "profiling": {
+      "enabled": false,
+      "output_path": "logs/profiling"
+    }
+  },
+  "validation": {
+    "out_of_sample_ratio": 0.3,
+    "validation_period": {
+      "start_date": "2020-01-01",
+      "end_date": "2023-12-31"
+    },
+    "metric": "sharpe_ratio"
+  },
+  "storage": {
+    "output_dir": "output",
+    "factor_results_dir": "output/factors",
+    "backtest_results_dir": "output/backtest",
+    "figure_dir": "output/figures"
+  },
+  "security": {
+    "encrypt_sensitive_data": false,
+    "api_keys_path": "config/api_keys.json"
+  },
+  "advanced": {
+    "jit_compilation": true,
+    "numba_enabled": true,
+    "cupy_enabled": false,
+    "memory_limit_mb": 4096
+  }
+}
